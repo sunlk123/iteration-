@@ -34,10 +34,17 @@ x_again = rnorm(n = 30, mean = 6, sd = .3)
 Now a function.
 
 ``` r
-z_score = function(x) {
+z_score = function(x_arg) {
   
-  (x - mean(x)) / sd(x)
+  if (!is.numeric(x_arg)) {
+    stop("x should be numeric")
+   } else if (length(x_arg) < 3) {
+      stop("x should be longer than 3")
+    }
+
   
+ (x_arg - mean(x_arg)) / sd(x_arg)
+ 
 }
 ```
 
@@ -45,7 +52,7 @@ Try out the
     function.
 
 ``` r
-z_score(x = x_again)
+z_score(x_arg = x_again)
 ```
 
     ##  [1]  1.5413954 -0.2961850  0.3204956 -0.2345965 -1.8983946 -0.6887392
@@ -53,3 +60,69 @@ z_score(x = x_again)
     ## [13]  0.7093845  0.5329776 -1.0329536 -1.0565157  0.2914637  0.7993727
     ## [19] -0.3082034  0.9409190  0.3336151 -0.9364778  0.2619634 -1.5869527
     ## [25]  1.6348722  2.3231173 -0.6286716 -1.4797904  0.5493942 -0.3367558
+
+``` r
+z_score(x_arg = 3)
+```
+
+    ## Error in z_score(x_arg = 3): x should be longer than 3
+
+``` r
+z_score(x_arg = "my name is jeff")
+```
+
+    ## Error in z_score(x_arg = "my name is jeff"): x should be numeric
+
+``` r
+z_score(x_arg = c(TRUE, TRUE, FALSE, TRUE))
+```
+
+    ## Error in z_score(x_arg = c(TRUE, TRUE, FALSE, TRUE)): x should be numeric
+
+``` r
+z_score(x_arg = iris)
+```
+
+    ## Error in z_score(x_arg = iris): x should be numeric
+
+## Multiple outputs
+
+``` r
+mean_and_sd = function(input_x) {
+  
+  if (!is.numeric(input_x)) {
+    stop("x should be numeric")
+   } else if (length(input_x) < 3) {
+      stop("x should be longer than 3")
+   }
+  
+  list(
+  mean_input = mean(input_x),
+  sd_input = sd(input_x),
+  z_score = (input_x - mean(input_x)) / sd(input_x)
+  )
+  
+}
+```
+
+test this function
+
+``` r
+mean_and_sd(input_x = x_again)
+```
+
+    ## $mean_input
+    ## [1] 6.039832
+    ## 
+    ## $sd_input
+    ## [1] 0.2385965
+    ## 
+    ## $z_score
+    ##  [1]  1.5413954 -0.2961850  0.3204956 -0.2345965 -1.8983946 -0.6887392
+    ##  [7] -0.6627062 -0.2415224  1.2161757  0.7926368 -0.3738088 -0.4855096
+    ## [13]  0.7093845  0.5329776 -1.0329536 -1.0565157  0.2914637  0.7993727
+    ## [19] -0.3082034  0.9409190  0.3336151 -0.9364778  0.2619634 -1.5869527
+    ## [25]  1.6348722  2.3231173 -0.6286716 -1.4797904  0.5493942 -0.3367558
+
+Lists are nice because they allow you to keep track of things that are
+not just numbers

@@ -59,7 +59,7 @@ z_score = function(x_arg) {
 
 Try out the function. 
 
-```{r}
+```{r, error = TRUE}
 z_score(x_arg = x_again)
 
 z_score(x_arg = 3)
