@@ -315,3 +315,21 @@ read_page_reviews("https://www.amazon.com/product-reviews/B00005JNBQ/ref=cm_cr_a
     ##  8 "Hilarious\n          … 5.0 out of… Hilarious                           
     ##  9 "Waste of money\n     … 1.0 out of… Terrible movie! Please don’t waste …
     ## 10 "Good movie\n         … 5.0 out of… Funny
+
+``` r
+read_page_reviews("https://www.amazon.com/product-reviews/B00005JNBQ/ref=cm_cr_arp_d_viewopt_rvwer?ie=UTF8&reviewerType=avp_only_reviews&sortBy=recent&pageNumber=2")
+```
+
+    ## # A tibble: 10 x 3
+    ##    title                       stars      text                             
+    ##    <chr>                       <chr>      <chr>                            
+    ##  1 "A classic\n            "   5.0 out o… I like your sleeves. They're rea…
+    ##  2 "FRIKKEN SWEET MOVIE, GAWS… 5.0 out o… It’s Napolean Dynamite. It’s cha…
+    ##  3 "You gonna eat the rest of… 5.0 out o… One of my favorite movies ever. …
+    ##  4 "Tina you fat lard come ge… 5.0 out o… It's a great movie               
+    ##  5 "Great family movie\n     … 5.0 out o… My kids as well as the adults lo…
+    ##  6 "Teens love it\n          … 5.0 out o… Original and funny               
+    ##  7 "Great\n            "       5.0 out o… Funny                            
+    ##  8 "Great Movie, Bad Packagin… 4.0 out o… First off, the stick-on label on…
+    ##  9 "jeez napoleon\n          … 5.0 out o… gosh                             
+    ## 10 "👍\n            "          5.0 out o… 👍
