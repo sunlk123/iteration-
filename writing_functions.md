@@ -176,3 +176,68 @@ sim_regression(n = 3000, beta0 = 17, beta1 = -3)
     ##   beta0_hat beta1_hat
     ##       <dbl>     <dbl>
     ## 1      17.0     -2.99
+
+``` r
+sim_regression(3000, 2, 3)
+```
+
+    ## # A tibble: 1 x 2
+    ##   beta0_hat beta1_hat
+    ##       <dbl>     <dbl>
+    ## 1      2.02      2.98
+
+arguments can have default functions too (beta0 and beta1 will change
+only if user changes it)
+
+``` r
+sim_regression = function(n, beta0 = 2, beta1 = 3) {
+  
+  sim_data = tibble(
+  x = rnorm(n, mean = 1, sd = 1),
+  y = beta0 + beta1 * x + rnorm(n, 0, 1)
+ )
+
+
+ ls_fit = lm(y ~ x, data = sim_data)
+  
+ tibble(
+   beta0_hat = coef(ls_fit)[1], 
+   beta1_hat = coef(ls_fit)[2]
+ )
+ 
+}
+
+sim_regression(n = 3000, beta0 = 17, beta1 = -3)
+```
+
+    ## # A tibble: 1 x 2
+    ##   beta0_hat beta1_hat
+    ##       <dbl>     <dbl>
+    ## 1      17.0     -2.97
+
+``` r
+sim_regression(3000, 2, 3)
+```
+
+    ## # A tibble: 1 x 2
+    ##   beta0_hat beta1_hat
+    ##       <dbl>     <dbl>
+    ## 1      2.00      3.02
+
+``` r
+sim_regression(3000)
+```
+
+    ## # A tibble: 1 x 2
+    ##   beta0_hat beta1_hat
+    ##       <dbl>     <dbl>
+    ## 1      2.02      2.98
+
+``` r
+sim_regression(n = 14, beta0 = 24)
+```
+
+    ## # A tibble: 1 x 2
+    ##   beta0_hat beta1_hat
+    ##       <dbl>     <dbl>
+    ## 1      23.9      2.83
