@@ -241,3 +241,77 @@ sim_regression(n = 14, beta0 = 24)
     ##   beta0_hat beta1_hat
     ##       <dbl>     <dbl>
     ## 1      23.9      2.83
+
+## Scrape lots of napoleon
+
+``` r
+url = "https://www.amazon.com/product-reviews/B00005JNBQ/ref=cm_cr_arp_d_viewopt_rvwer?ie=UTF8&reviewerType=avp_only_reviews&sortBy=recent&pageNumber=1"
+
+dynamite_html = read_html(url)
+
+review_titles = dynamite_html %>%
+  html_nodes("#cm_cr-review_list .review-title") %>%
+  html_text()
+
+review_stars = dynamite_html %>%
+  html_nodes("#cm_cr-review_list .review-rating") %>%
+  html_text()
+
+review_text = dynamite_html %>%
+    html_nodes(".review-text-content span") %>%
+    html_text()
+
+reviews = tibble(
+  title = review_titles,
+  stars = review_stars,
+  text = review_text
+)
+```
+
+Now as a function
+
+``` r
+read_page_reviews = function(page_url) {
+
+  dynamite_html = read_html(page_url)
+  
+  review_titles = dynamite_html %>%
+    html_nodes("#cm_cr-review_list .review-title") %>%
+    html_text()
+  
+  review_stars = dynamite_html %>%
+    html_nodes("#cm_cr-review_list .review-rating") %>%
+    html_text()
+  
+  review_text = dynamite_html %>%
+    html_nodes(".review-text-content span") %>%
+    html_text()
+  
+  reviews = tibble(
+    title = review_titles,
+    stars = review_stars,
+    text = review_text
+  )
+  
+  reviews
+  
+}
+```
+
+``` r
+read_page_reviews("https://www.amazon.com/product-reviews/B00005JNBQ/ref=cm_cr_arp_d_viewopt_rvwer?ie=UTF8&reviewerType=avp_only_reviews&sortBy=recent&pageNumber=1")
+```
+
+    ## # A tibble: 10 x 3
+    ##    title                   stars       text                                
+    ##    <chr>                   <chr>       <chr>                               
+    ##  1 "Great movie\n        … 5.0 out of… Love this movie.                    
+    ##  2 "Duh\n            "     5.0 out of… Best movie ever                     
+    ##  3 "Great video\n        … 5.0 out of… Product as described.  Great transa…
+    ##  4 "Give me some of your … 5.0 out of… This movie will always be my favori…
+    ##  5 "Nostalgic\n          … 5.0 out of… One of the best nostalgic movies of…
+    ##  6 "Make you giggle type … 5.0 out of… "I love, love, love this movie.  It…
+    ##  7 "This movie is so stup… 5.0 out of… No, really.  It's so stupid.  Your …
+    ##  8 "Hilarious\n          … 5.0 out of… Hilarious                           
+    ##  9 "Waste of money\n     … 1.0 out of… Terrible movie! Please don’t waste …
+    ## 10 "Good movie\n         … 5.0 out of… Funny
