@@ -95,3 +95,26 @@ mean_and_sd(input_x = x_again)
 ```
 
 Lists are nice because they allow you to keep track of things that are not just numbers 
+
+## Multiple inputs
+
+```{r}
+sim_data = tibble(
+  x = rnorm(30, mean = 1, sd = 1),
+  y = 2 + 3 * x + rnorm(30, 0, 1)
+)
+
+sim_data %>% 
+  ggplot(aes(x = x, y = y)) + 
+  geom_point()
+
+ls_fit = lm(y ~ x, data = sim_data)
+  
+beta0_hat = coef(ls_fit)[1]
+beta1_hat = coef(ls_fit)[2]
+```
+
+```{r}
+
+```
+
