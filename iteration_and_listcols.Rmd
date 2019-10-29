@@ -185,8 +185,38 @@ output = map(vec_urls, read_page_reviews)
 output
 ```
 
-## List columns
-```{r}
+## List columns/weather df
 
+```{r}
+weather = 
+  rnoaa::meteo_pull_monitors(
+    c("USW00094728", "USC00519397", "USS0023B17S"),
+    var = c("PRCP", "TMIN", "TMAX"), 
+    date_min = "2016-01-01",
+    date_max = "2016-12-31") %>%
+  mutate(
+    name = recode(id, USW00094728 = "CentralPark_NY", 
+                      USC00519397 = "Waikiki_HA",
+                      USS0023B17S = "Waterhole_WA"),
+    tmin = tmin / 10,
+    tmax = tmax / 10) %>%
+  select(name, id, everything())
+```
+
+nest within station 
+
+```{r}
+weather_nest =
+  weather %>%
+  nest(data = date:tmin)
+```
+
+is the list column really a list?
+
+```{r}
+weather_nest %>% pull(name)
+weather_nest %>% pull(data)
+
+weather_nest$data[[1]]
 ```
 
