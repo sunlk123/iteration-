@@ -8,6 +8,7 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
+library(rvest)
 library(p8105.datasets)
 
 knitr::opts_chunk$set(
@@ -124,6 +125,68 @@ output_median = map_dbl(df, median)
 
 #organizes output into dataframe 
 output = map_dfr(df, mean_and_sd)
+
+#being explicit about the input
+output = map(df, ~mean_and_sd(.x))
 ```
 
+## Napoleon
+
+```{r}
+read_page_reviews = function(url) {
+  
+  h = read_html(url)
+  
+  title = h %>%
+    html_nodes("#cm_cr-review_list .review-title") %>%
+    html_text()
+  
+  stars = h %>%
+    html_nodes("#cm_cr-review_list .review-rating") %>%
+    html_text() %>%
+    str_extract("\\d") %>%
+    as.numeric()
+  
+  text = h %>%
+    html_nodes(".review-data:nth-child(5)") %>%
+    html_text()
+  
+  data_frame(title, stars, text)
+}
+```
+
+```{r}
+url_base = "https://www.amazon.com/product-reviews/B00005JNBQ/ref=cm_cr_arp_d_viewopt_rvwer?ie=UTF8&reviewerType=avp_only_reviews&sortBy=recent&pageNumber="
+
+#create vector of urls
+vec_urls = str_c(url_base, 1:5)
+
+vec_urls
+
+read_page_reviews(vec_urls[[1]])
+read_page_reviews(vec_urls[[2]])
+read_page_reviews(vec_urls[[3]])
+read_page_reviews(vec_urls[[4]])
+read_page_reviews(vec_urls[[5]])
+
+output = vector("list", length = 5)
+
+for (i in 1:5) {
+  
+  output[[i]] = read_page_reviews(vec_urls[[i]])
+  
+}
+
+output
+
+# this one line of code does the same thing as the for loop code from lines 172 to 178
+output = map(vec_urls, read_page_reviews)
+
+output
+```
+
+## List columns
+```{r}
+
+```
 
