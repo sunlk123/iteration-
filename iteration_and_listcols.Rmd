@@ -294,5 +294,3 @@ napoleon =
   ) %>%
   unnest(reviews)
 ```
-
-
