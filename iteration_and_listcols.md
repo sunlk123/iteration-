@@ -748,3 +748,32 @@ for (i in 1:3) {
 
 output = map(weather_nest$data, weather_lm)
 ```
+
+add columns to a dataframe using mutate
+
+``` r
+weather_nest %>%
+  mutate(lin_models = map(data, weather_lm)) %>%
+  select(-data) %>%
+  filter(name != "CentralPark_NY")
+```
+
+    ## # A tibble: 2 x 3
+    ##   name         id          lin_models
+    ##   <chr>        <chr>       <list>    
+    ## 1 Waikiki_HA   USC00519397 <lm>      
+    ## 2 Waterhole_WA USS0023B17S <lm>
+
+## Revisit Napoleon… again
+
+``` r
+napoleon = 
+  tibble(
+    page = 1:5,
+    urls = str_c(url_base, page)
+  ) %>%
+  mutate(
+    reviews = map(urls, read_page_reviews)
+  ) %>%
+  unnest(reviews)
+```
