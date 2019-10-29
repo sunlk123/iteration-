@@ -639,3 +639,112 @@ weather_nest$data[[1]]
     ##  9 2016-01-09     0   8.3   4.4
     ## 10 2016-01-10   457  15     4.4
     ## # … with 356 more rows
+
+``` r
+#un-nesting things
+weather_nest %>%
+  unnest()
+```
+
+    ## # A tibble: 1,098 x 6
+    ##    name           id          date        prcp  tmax  tmin
+    ##    <chr>          <chr>       <date>     <dbl> <dbl> <dbl>
+    ##  1 CentralPark_NY USW00094728 2016-01-01     0   5.6   1.1
+    ##  2 CentralPark_NY USW00094728 2016-01-02     0   4.4   0  
+    ##  3 CentralPark_NY USW00094728 2016-01-03     0   7.2   1.7
+    ##  4 CentralPark_NY USW00094728 2016-01-04     0   2.2  -9.9
+    ##  5 CentralPark_NY USW00094728 2016-01-05     0  -1.6 -11.6
+    ##  6 CentralPark_NY USW00094728 2016-01-06     0   5    -3.8
+    ##  7 CentralPark_NY USW00094728 2016-01-07     0   7.8  -0.5
+    ##  8 CentralPark_NY USW00094728 2016-01-08     0   7.8  -0.5
+    ##  9 CentralPark_NY USW00094728 2016-01-09     0   8.3   4.4
+    ## 10 CentralPark_NY USW00094728 2016-01-10   457  15     4.4
+    ## # … with 1,088 more rows
+
+## Operations on list columns
+
+Can I do useful things with a list column…?
+
+``` r
+central_park_df = weather_nest$data[[1]]
+
+lm(tmax ~ tmin, data = central_park_df)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = tmax ~ tmin, data = central_park_df)
+    ## 
+    ## Coefficients:
+    ## (Intercept)         tmin  
+    ##       7.779        1.045
+
+``` r
+lm(tmax ~ tmin, data = weather_nest$data[[1]])
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = tmax ~ tmin, data = weather_nest$data[[1]])
+    ## 
+    ## Coefficients:
+    ## (Intercept)         tmin  
+    ##       7.779        1.045
+
+``` r
+lm(tmax ~ tmin, data = weather_nest$data[[2]])
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = tmax ~ tmin, data = weather_nest$data[[2]])
+    ## 
+    ## Coefficients:
+    ## (Intercept)         tmin  
+    ##      22.489        0.326
+
+``` r
+lm(tmax ~ tmin, data = weather_nest$data[[3]])
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = tmax ~ tmin, data = weather_nest$data[[3]])
+    ## 
+    ## Coefficients:
+    ## (Intercept)         tmin  
+    ##       6.851        1.245
+
+try a loop
+
+``` r
+output = vector("list", length = 3)
+
+for (i in 1:3) {
+  
+  output[[i]] = lm(tmax ~ tmin, weather_nest$data[[i]])
+  
+}
+```
+
+## Turn into a map function
+
+Create new function, weather\_lm
+
+``` r
+weather_lm = function(df) {
+  
+  lm(tmax ~ tmin, data = df)
+  
+}
+```
+
+``` r
+for (i in 1:3) {
+  
+  output[[i]] = weather_lm(weather_nest$data[[i]])
+  
+}
+
+output = map(weather_nest$data, weather_lm)
+```
