@@ -20,3 +20,32 @@ sim_regression = function(n, beta0 = 2, beta1 = 3) {
   )
 }
 ```
+
+we already running a simulation every time we run this line of code
+
+``` r
+sim_regression(n = 30)
+```
+
+    ## # A tibble: 1 x 2
+    ##   beta0_hat beta1_hat
+    ##       <dbl>     <dbl>
+    ## 1      2.09      3.04
+
+## rerun using a for loop
+
+``` r
+output = vector("list", length = 5000)
+
+for (i in 1:5000) {
+  
+  output[[i]] = sim_regression(n = 30)
+  
+}
+
+bind_rows(output) %>%
+  ggplot(aes(x = beta0_hat)) +
+  geom_density()
+```
+
+![](simulation_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
